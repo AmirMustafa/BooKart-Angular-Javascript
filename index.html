@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html ng-app="bookart">												<!-- Name of the module is bookart -->
+<head>
+	<title>Welcome to BooKart</title>
+	<link rel="stylesheet" href="assets/css/bootstrap.css">
+	<link rel="stylesheet" href="app.css">
+	 <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.26/angular.js"></script>
+	 <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.26/angular-route.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.26/angular-animate.js"></script>
+									<!-- Adding angular.js, angular-route and angular-animate.js library-->
+</head>
+<body>
+<!-- ===========================START : PARTIAL FOR BOOK-LIST.HTML=====================================  -->
+														<!-- Partial comments are given in partial folder -->
+	<script type="text/ng-template" id="book-list.html">
+		<div id="bookListWrapper">
+		<form role="form">
+			<div class="form-group">
+				<input type="text" class="form-control" placeholder="Search here ..." ng-model="SearchString">
+			</div>
+		</form>
+		<div id="sec">
+			<ul class="list-unstyled">
+				<li class="book"
+				    style="background: white url(imgs/{{book.imgUrl}}) no-repeat"
+				    ng-repeat="book in books | filter: SearchString">
+					<div class="book-details clearfix">
+						<h3>{{book.name}}</h3>
+						<p>{{book.price | currency: 'Rs. '}}</p>
+
+						<ul class="list-unstyled list-inline">
+							<li>Rating: {{book.rating}}</li>
+							<li>Binding: {{book.binding}}</li>
+							<li>Publisher: {{book.publisher}}</li>
+							<li>Released: {{book.releaseDate}}</li>
+						</ul>
+						<p>{{book.details}}</p>
+						<button class="btn btn-info pull-left" ng-click="addToKart(book)">Add to Kart</button>
+					</div>
+				</li>
+			</ul>
+		</div>
+	</div>
+	</script>
+
+<!-- ===========================END : PARTIAL FOR BOOK-LIST.HTML=====================================  -->
+
+<!-- ===========================START : PARTIAL FOR KART-LIST.HTML=====================================  -->
+
+	<script type="text/ng-template" id="kart-list.html">
+		<!-- <div><br/>This is Kart View</div> -->
+
+		<div id="bookListWrapper">
+		<p>&emsp;&emsp;&emsp;Please click on button to buy the book.</p>
+		<div id="sec">
+			<ul class="list-unstyled">
+				<li class="book"
+				    style="background: white url(imgs/{{book.imgUrl}}) no-repeat"
+				    ng-repeat="book in kart">
+					<div class="book-details clearfix">
+						<h3>{{book.name}}</h3>
+						<p>{{book.price | currency: 'Rs. '}}</p>
+
+						<ul class="list-unstyled list-inline">
+							<li>Rating: {{book.rating}}</li>
+							<li>Binding: {{book.binding}}</li>
+							<li>Publisher: {{book.publisher}}</li>
+							<li>Released: {{book.releaseDate}}</li>
+						</ul>
+						<p>{{book.details}}</p>
+						<button class="btn btn-info pull-left" ng-click="buy(book)">Buy</button>
+					</div>
+				</li>
+			</ul>
+		</div>
+	</div>
+	</script>
+
+	<!-- ===========================END : PARTIAL FOR KART-LIST.HTML=====================================  -->
+
+	<div id="header-wrapper" ng-controller="HeaderCtrl">			<!-- div for HeadCtrl (The Head Section) -->
+		<span class="logo pull-left">{{appDetails.title}}</span>	
+		<span class="tagline pull-left">{{appDetails.tagline}}</span>  <!-- Details are defined in factory and 																				passed in controller -->
+
+		<div class="nav-wrapper pull-left">
+			<!-- <ul class="nav nav-pills">			// This was scrolling between Books and Kart in Header 																		without proper active clicking
+				<li class="active"><a href="#/books">Books</a></li>
+				<li><a href="#/kart">Kart</a></li>
+			</ul> -->
+
+												<!-- This is scrolling between Books and Kart in Header 		with proper active clicking
+												Inplace of class we put ng-class and created function(i.e. isActive and passed the same routing parameters).
+												Function are defined in HeadCtrl Controller in app.js -->
+
+			<ul class="nav nav-pills">
+				<li ng-class="{active: nav.isActive('/books')}"><a href="#/books">Books</a></li>
+				<li ng-class="{active: nav.isActive('/kart')}"><a href="#/kart">Kart</a></li>
+			</ul>									<!-- In the link we have given routing link see app.config in 										app.js file, link must be given after # -->
+		</div>
+	</div>
+										<!-- This is body section done by routing and rendered via partials in templateUrl -->
+	<div ng-view class="container"></div>			<!-- ng-view is for routing, making SPA -->
+													<!-- class given in ng-view is for animation css written in app.css file. Note we have added angular animation library and injected that in the app.module in dependency (line 1 ngAnimate) -->
+	
+
+
+<script src="app.js"></script>						<!-- Javascript file added -->
+</body>
+</html>
